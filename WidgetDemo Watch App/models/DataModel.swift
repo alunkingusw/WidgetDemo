@@ -12,9 +12,10 @@ import WidgetKit
 
 class DataModel:ObservableObject{
     
-    @Published var dataDetails: DataDetails = DataDetails()
-    
+    @Published var dataDetails: DataDetails
+    let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.ac.uk.southwales.WidgetDemo")?.appendingPathComponent("WidgetDemo.json")
     init(){
+        dataDetails = DataDetails()
         load()
     }
     
@@ -23,9 +24,14 @@ class DataModel:ObservableObject{
     func save(){
         do{
             let data = try JSONEncoder().encode(dataDetails)
-            let url = URL.documentsDirectory.appending(path:"WidgetDemo")
-            try data.write(to:url, options:[.atomic, .completeFileProtection])
-            WidgetCenter.shared.reloadTimelines(ofKind: "WidgetDemoWidget")
+            
+            if let validURL = url {
+                try data.write(to:validURL, options:[.atomic])
+            }else{
+                print ("Save failed - invalid path")
+            }
+           
+            WidgetCenter.shared.reloadTimelines(ofKind: "WidgetDemo")
         } catch {
             print ("Save failed")
         }
@@ -33,9 +39,14 @@ class DataModel:ObservableObject{
     
     func load(){
         do{
-            let url = URL.documentsDirectory.appending(path:"WidgetDemo")
-            let data = try Data(contentsOf:url)
-            dataDetails = try JSONDecoder().decode(DataDetails.self, from: data)
+            if let validURL = url {
+                let data = try Data(contentsOf:validURL)
+                
+                dataDetails = try JSONDecoder().decode(DataDetails.self, from: data)
+            }else{
+                print ("Load failed - invalid path")
+                dataDetails = DataDetails()
+            }
         }catch{
             print ("model not found")
             //return empty model
