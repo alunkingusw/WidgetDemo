@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct WidgetDemo_Watch_AppApp: App {
+    @StateObject var dataModel:DataModel = DataModel()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            
+            ContentView(model:dataModel)
         }
     }
 }

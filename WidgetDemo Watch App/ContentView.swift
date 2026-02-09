@@ -8,17 +8,42 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var model:DataModel
+    @State var selectedPage:Int = 0
+    var hasExceededTarget: Bool {
+        model.dataDetails.actualSteps >= model.dataDetails.targetSteps
+    }
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection:$selectedPage){
+            VStack{
+                Text("Current Steps")
+                HStack {
+                    /*
+                     Let's view the progress here, and add a tab view to set the targets below
+                     */
+                    Stepper(
+                        value: $model.dataDetails.actualSteps,
+                        step: 50
+                    ) {
+                        Text("\(model.dataDetails.actualSteps)")
+                            .font(.title2)
+                            .monospacedDigit()
+                    }
+                    .onChange(of: model.dataDetails.actualSteps) {
+                        model.save()
+                    }
+                }
+            //let's show progress here as a progress bar.
+                ProgressView(value: (Float(model.dataDetails.actualSteps) / Float(model.dataDetails.targetSteps))).tint(hasExceededTarget ? .green : .blue)
+            }
+            VStack{
+                TargetSetting(model:model)
+            }
         }
-        .padding()
+        .padding().tabViewStyle(.verticalPage)
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(model:DataModel())
 }
