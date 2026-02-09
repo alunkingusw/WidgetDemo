@@ -25,7 +25,7 @@ class DataModel:ObservableObject{
             let data = try JSONEncoder().encode(dataDetails)
             let url = URL.documentsDirectory.appending(path:"WidgetDemo")
             try data.write(to:url, options:[.atomic, .completeFileProtection])
-            WidgetCenter.shared.reloadTimelines(ofKind: "WidgetDemo")
+            WidgetCenter.shared.reloadTimelines(ofKind: "WidgetDemoWidget")
         } catch {
             print ("Save failed")
         }

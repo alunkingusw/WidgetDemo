@@ -15,7 +15,7 @@ struct TargetSetting: View {
              Here we load the datamodel and set the targets using forms
              */
             Text("Target Steps")
-            HStack{
+            VStack{
                 Button("-"){
                     model.dataDetails.targetSteps -= 500
                     model.save()

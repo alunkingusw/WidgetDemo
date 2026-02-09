@@ -14,8 +14,9 @@ struct Provider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        //get the current step data
+        //get the current step data - load the data
         let stepData:DataModel = DataModel()
+        stepData.load()
         //use this data in the view snapshot
         let entry = SimpleEntry(date: Date(), targetSteps:stepData.dataDetails.targetSteps, actualSteps: stepData.dataDetails.actualSteps)
         completion(entry)
@@ -25,6 +26,7 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
         //get the current data
         let stepData:DataModel = DataModel()
+        stepData.load()
         
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
@@ -43,8 +45,13 @@ struct Provider: TimelineProvider {
 //    }
 }
 
+/*
+ This is where we define the data that we want to use in our widgets
+ */
 struct SimpleEntry: TimelineEntry {
     var date: Date
+    
+    //we define the data that we want to display in our widget here
     let targetSteps: Int
     let actualSteps: Int
 }
@@ -90,8 +97,10 @@ struct WidgetDemoWidget: Widget {
                     .background()
             }
         }
-        .configurationDisplayName("My Widget")
+        .configurationDisplayName("StepCount")
         .description("This is an example widget.")
+        
+        //this is where we define the types of widget you are compatible with
         .supportedFamilies([.accessoryCircular,
                                     .accessoryRectangular, .accessoryInline])
     }

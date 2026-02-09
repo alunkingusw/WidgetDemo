@@ -23,7 +23,7 @@ struct ContentView: View {
                      */
                     Stepper(
                         value: $model.dataDetails.actualSteps,
-                        step: 50
+                        step: 50,
                     ) {
                         Text("\(model.dataDetails.actualSteps)")
                             .font(.title2)
