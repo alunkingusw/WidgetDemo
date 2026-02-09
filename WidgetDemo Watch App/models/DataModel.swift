@@ -13,7 +13,7 @@ import WidgetKit
 class DataModel:ObservableObject{
     
     @Published var dataDetails: DataDetails
-    let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.ac.uk.southwales.WidgetDemo")?.appendingPathComponent("WidgetDemo.json")
+    let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.uk.ac.southwales.WidgetDemo")?.appendingPathComponent("WidgetDemo.json")
     init(){
         dataDetails = DataDetails()
         load()
@@ -31,7 +31,7 @@ class DataModel:ObservableObject{
                 print ("Save failed - invalid path")
             }
            
-            WidgetCenter.shared.reloadTimelines(ofKind: "WidgetDemo")
+            WidgetCenter.shared.reloadAllTimelines()
         } catch {
             print ("Save failed")
         }
